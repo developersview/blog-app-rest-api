@@ -6,6 +6,9 @@ import com.developersview.springbootblogapprestapi.repository.PostRepository;
 import com.developersview.springbootblogapprestapi.service.PostService;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 /**
  * @author pranoy.chakraborty
  * @Date 20/06/2023
@@ -28,6 +31,12 @@ public class PostServiceImpl implements PostService {
         //convert entity to dto
         PostDto postResponse = mapToDto(newPost);
         return postResponse;
+    }
+
+    @Override
+    public List<PostDto> getAllPosts() {
+        List<Post> posts = postRepository.findAll();
+        return posts.stream().map(post -> mapToDto(post)).collect(Collectors.toList());
     }
 
     private PostDto mapToDto(Post post) {
