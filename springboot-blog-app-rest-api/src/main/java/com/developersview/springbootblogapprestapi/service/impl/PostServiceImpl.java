@@ -1,6 +1,7 @@
 package com.developersview.springbootblogapprestapi.service.impl;
 
 import com.developersview.springbootblogapprestapi.entity.Post;
+import com.developersview.springbootblogapprestapi.exception.ResourceNotFoundException;
 import com.developersview.springbootblogapprestapi.payload.PostDto;
 import com.developersview.springbootblogapprestapi.repository.PostRepository;
 import com.developersview.springbootblogapprestapi.service.PostService;
@@ -37,6 +38,34 @@ public class PostServiceImpl implements PostService {
     public List<PostDto> getAllPosts() {
         List<Post> posts = postRepository.findAll();
         return posts.stream().map(post -> mapToDto(post)).collect(Collectors.toList());
+    }
+
+    @Override
+    public PostDto getPostById(long id) {
+        Post post = postRepository.findById(id).orElseThrow(
+                () -> new ResourceNotFoundException("Post", "id", id)
+        );
+        return mapToDto(post);
+    }
+
+    @Override
+    public PostDto updatePost(PostDto postDto, long id) {
+        Post post = postRepository.findById(id).orElseThrow(
+                () -> new ResourceNotFoundException("Post", "id", id)
+        );
+        post.setTitle(postDto.getTitle());
+        post.setDescription(postDto.getDescription());
+        post.setContent(postDto.getContent());
+        Post updatedPost = postRepository.save(post);
+        return mapToDto(updatedPost);
+    }
+
+    @Override
+    public void deletePostById(long id) {
+        Post post = postRepository.findById(id).orElseThrow(
+                () -> new ResourceNotFoundException("Post", "id", id)
+        );
+        postRepository.delete(post);
     }
 
     private PostDto mapToDto(Post post) {
