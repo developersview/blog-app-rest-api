@@ -5,6 +5,9 @@ import com.developersview.springbootblogapprestapi.exception.ResourceNotFoundExc
 import com.developersview.springbootblogapprestapi.payload.PostDto;
 import com.developersview.springbootblogapprestapi.repository.PostRepository;
 import com.developersview.springbootblogapprestapi.service.PostService;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -35,9 +38,14 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public List<PostDto> getAllPosts() {
-        List<Post> posts = postRepository.findAll();
-        return posts.stream().map(post -> mapToDto(post)).collect(Collectors.toList());
+    public List<PostDto> getAllPosts(int pageNo, int pageSize) {
+        //create pageble instance
+        Pageable pageable = PageRequest.of(pageNo, pageSize);
+        Page<Post> posts = postRepository.findAll(pageable);
+
+        //get content of page object
+        List<Post> listOfPost = posts.getContent();
+        return listOfPost.stream().map(post -> mapToDto(post)).collect(Collectors.toList());
     }
 
     @Override

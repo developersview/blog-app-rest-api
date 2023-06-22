@@ -28,24 +28,27 @@ public class PostController {
     }
 
     @GetMapping
-    public List<PostDto> getAllPosts(){
-        return postService.getAllPosts();
+    public List<PostDto> getAllPosts(
+            @RequestParam(value = "pageNo", defaultValue = "0", required = false) int pageNo,
+            @RequestParam(value = "pageSize", defaultValue = "10", required = false) int pageSize
+    ) {
+        return postService.getAllPosts(pageNo, pageSize);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<PostDto> getPostById(@PathVariable long id){
-        return new ResponseEntity<>(postService.getPostById(id),HttpStatus.OK);
+    public ResponseEntity<PostDto> getPostById(@PathVariable long id) {
+        return new ResponseEntity<>(postService.getPostById(id), HttpStatus.OK);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<PostDto> updatePost(@RequestBody PostDto postDto, @PathVariable long id){
+    public ResponseEntity<PostDto> updatePost(@RequestBody PostDto postDto, @PathVariable long id) {
         PostDto getPostResponse = postService.updatePost(postDto, id);
-        return new ResponseEntity<>(getPostResponse,HttpStatus.OK);
+        return new ResponseEntity<>(getPostResponse, HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<String> deletePost(@PathVariable long id){
+    public ResponseEntity<String> deletePost(@PathVariable long id) {
         postService.deletePostById(id);
-        return new ResponseEntity<>("Post has been successfully deleted",HttpStatus.OK);
+        return new ResponseEntity<>("Post has been successfully deleted", HttpStatus.OK);
     }
 }
