@@ -3,6 +3,9 @@ package com.developersview.springbootblogapprestapi.entity;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.HashSet;
+import java.util.Set;
+
 /**
  * @author pranoy.chakraborty
  * @Date 19/06/2023
@@ -28,4 +31,7 @@ public class Post {
 
     @Column(name = "content", nullable = false)
     private String content;
+
+    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<Comment> commentSet = new HashSet<>();
 }
