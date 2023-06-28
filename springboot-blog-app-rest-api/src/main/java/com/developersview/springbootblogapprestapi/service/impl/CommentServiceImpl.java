@@ -2,11 +2,13 @@ package com.developersview.springbootblogapprestapi.service.impl;
 
 import com.developersview.springbootblogapprestapi.entity.Comment;
 import com.developersview.springbootblogapprestapi.entity.Post;
+import com.developersview.springbootblogapprestapi.exception.BlogApiException;
 import com.developersview.springbootblogapprestapi.exception.ResourceNotFoundException;
 import com.developersview.springbootblogapprestapi.payload.CommentDto;
 import com.developersview.springbootblogapprestapi.repository.CommentRepository;
 import com.developersview.springbootblogapprestapi.repository.PostRepository;
 import com.developersview.springbootblogapprestapi.service.CommentService;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -32,7 +34,7 @@ public class CommentServiceImpl implements CommentService {
     public CommentDto createComment(long postId, CommentDto commentDto) {
         Comment comment = mapToEntity(commentDto);
 
-        //retrive post entity by id
+        //retrieve post entity by id
         Post post = postRepository.findById(postId)
                 .orElseThrow(() -> new ResourceNotFoundException("Post", "id", postId));
 
@@ -48,6 +50,18 @@ public class CommentServiceImpl implements CommentService {
     public List<CommentDto> getAllCommentsByPostId(long postId) {
         List<Comment> allComments = commentRepository.findByPostId(postId);
         return allComments.stream().map(this::mapToDto).collect(Collectors.toList());
+    }
+
+    @Override
+    public CommentDto getCommentById(long postId, long commentId) {
+        Post post = postRepository.findById(postId)
+                .orElseThrow(() -> new ResourceNotFoundException("Post", "Id", postId));
+        Comment comment = commentRepository.findById(commentId)
+                .orElseThrow(() -> new ResourceNotFoundException("Comment", "Id", commentId));
+        if (!comment.getPost().getId().equals(post.getId())) {
+            throw new BlogApiException(HttpStatus.BAD_REQUEST, "Comment doesn't belong to post");
+        }
+        return mapToDto(comment);
     }
 
     private CommentDto mapToDto(Comment comment) {
