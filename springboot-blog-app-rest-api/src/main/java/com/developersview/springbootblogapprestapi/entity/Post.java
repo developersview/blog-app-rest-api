@@ -10,7 +10,7 @@ import java.util.Set;
  * @author pranoy.chakraborty
  * @Date 19/06/2023
  */
-@Data
+
 @Getter
 @Setter
 @AllArgsConstructor
@@ -33,5 +33,5 @@ public class Post {
     private String content;
 
     @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
-    private Set<Comment> commentSet = new HashSet<>();
+    private Set<Comment> comments = new HashSet<>();
 }
