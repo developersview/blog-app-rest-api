@@ -54,14 +54,24 @@ public class CommentServiceImpl implements CommentService {
 
     @Override
     public CommentDto getCommentById(long postId, long commentId) {
-        Post post = postRepository.findById(postId)
-                .orElseThrow(() -> new ResourceNotFoundException("Post", "Id", postId));
-        Comment comment = commentRepository.findById(commentId)
-                .orElseThrow(() -> new ResourceNotFoundException("Comment", "Id", commentId));
-        if (!comment.getPost().getId().equals(post.getId())) {
-            throw new BlogApiException(HttpStatus.BAD_REQUEST, "Comment doesn't belong to post");
-        }
+        Comment comment = retrieveComment(postId, commentId);
         return mapToDto(comment);
+    }
+
+    @Override
+    public CommentDto updateComment(long postId, long commentId, CommentDto commentDto) {
+        Comment comment = retrieveComment(postId, commentId);
+        comment.setName(commentDto.getName());
+        comment.setEmail(commentDto.getEmail());
+        comment.setBody(commentDto.getBody());
+        Comment updatedComment = commentRepository.save(comment);
+        return mapToDto(updatedComment);
+    }
+
+    @Override
+    public void deleteComment(long postId, long commentId) {
+        Comment comment = retrieveComment(postId, commentId);
+        commentRepository.delete(comment);
     }
 
     private CommentDto mapToDto(Comment comment) {
@@ -79,6 +89,17 @@ public class CommentServiceImpl implements CommentService {
         comment.setName(commentDto.getName());
         comment.setEmail(commentDto.getEmail());
         comment.setBody(commentDto.getBody());
+        return comment;
+    }
+
+    private Comment retrieveComment(long postId, long commentId) {
+        Post post = postRepository.findById(postId)
+                .orElseThrow(() -> new ResourceNotFoundException("Post", "Id", postId));
+        Comment comment = commentRepository.findById(commentId)
+                .orElseThrow(() -> new ResourceNotFoundException("Comment", "Id", commentId));
+        if (!comment.getPost().getId().equals(post.getId())) {
+            throw new BlogApiException(HttpStatus.BAD_REQUEST, "Comment doesn't belong to post");
+        }
         return comment;
     }
 }
