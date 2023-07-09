@@ -1,6 +1,7 @@
 package com.developersview.springbootblogapprestapi.service;
 
 import com.developersview.springbootblogapprestapi.payload.LoginDto;
+import com.developersview.springbootblogapprestapi.payload.RegisterDto;
 
 /**
  * @author pranoy.chakraborty
@@ -8,4 +9,5 @@ import com.developersview.springbootblogapprestapi.payload.LoginDto;
  */
 public interface AuthService {
     String login(LoginDto loginDto);
+    String register(RegisterDto registerDto);
 }
