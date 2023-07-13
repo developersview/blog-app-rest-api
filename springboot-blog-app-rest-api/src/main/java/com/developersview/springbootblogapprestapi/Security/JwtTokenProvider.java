@@ -74,7 +74,5 @@ public class JwtTokenProvider {
         } catch (IllegalArgumentException ex) {
             throw new BlogApiException(HttpStatus.BAD_REQUEST, "JWT claims string is empty");
         }
-
     }
-
 }
