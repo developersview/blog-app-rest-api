@@ -1,6 +1,7 @@
 package com.developersview.springbootblogapprestapi.config;
 
 import com.developersview.springbootblogapprestapi.Security.JwtAuthenticationEntryPoint;
+import com.developersview.springbootblogapprestapi.Security.JwtAuthenticationFilter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -17,6 +18,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 /**
  * @author pranoy.chakraborty
@@ -28,10 +30,14 @@ public class SecurityConfig {
 
     private UserDetailsService userDetailsService;
     private JwtAuthenticationEntryPoint authenticationEntryPoint;
+    private JwtAuthenticationFilter authenticationFilter;
 
-    public SecurityConfig(UserDetailsService userDetailsService, JwtAuthenticationEntryPoint authenticationEntryPoint) {
+    public SecurityConfig(UserDetailsService userDetailsService,
+                          JwtAuthenticationEntryPoint authenticationEntryPoint,
+                          JwtAuthenticationFilter authenticationFilter) {
         this.userDetailsService = userDetailsService;
         this.authenticationEntryPoint = authenticationEntryPoint;
+        this.authenticationFilter = authenticationFilter;
     }
 
     @Bean
@@ -59,7 +65,7 @@ public class SecurityConfig {
                 ).sessionManagement(session -> session
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 );
-
+        http.addFilterBefore(authenticationFilter, UsernamePasswordAuthenticationFilter.class);
         return http.build();
     }
 
