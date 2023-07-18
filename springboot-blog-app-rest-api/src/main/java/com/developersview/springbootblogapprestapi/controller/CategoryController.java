@@ -3,6 +3,7 @@ package com.developersview.springbootblogapprestapi.controller;
 import com.developersview.springbootblogapprestapi.entity.Category;
 import com.developersview.springbootblogapprestapi.payload.CategoryDto;
 import com.developersview.springbootblogapprestapi.service.CategoryService;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -23,6 +24,9 @@ public class CategoryController {
         this.categoryService = categoryService;
     }
 
+    @SecurityRequirement(
+            name = "Bear Authentication"
+    )
     @PostMapping
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<CategoryDto> addCategory(@RequestBody CategoryDto categoryDto) {
@@ -41,6 +45,9 @@ public class CategoryController {
         return ResponseEntity.ok(categoryService.getALlCategories());
     }
 
+    @SecurityRequirement(
+            name = "Bear Authentication"
+    )
     @PutMapping("{id}")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<CategoryDto> updateCategory(@RequestBody CategoryDto categoryDto,
@@ -49,6 +56,9 @@ public class CategoryController {
         return new ResponseEntity<>(updatedCategory, HttpStatus.OK);
     }
 
+    @SecurityRequirement(
+            name = "Bear Authentication"
+    )
     @DeleteMapping("{id}")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<String> deleteCategory(@PathVariable("id") Long categoryId) {
