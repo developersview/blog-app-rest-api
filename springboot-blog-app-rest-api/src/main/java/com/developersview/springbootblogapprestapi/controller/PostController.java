@@ -23,7 +23,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/posts")
 @Tag(
-        name = "CRUD REST API for Blog Post Resources "
+        name = "CRUD REST API for Post Resource"
 )
 public class PostController {
     private PostService postService;

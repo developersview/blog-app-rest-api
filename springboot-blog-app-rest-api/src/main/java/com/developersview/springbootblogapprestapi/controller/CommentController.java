@@ -19,7 +19,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/")
 @Tag(
-        name = "CRUD REST API for Blog Comment Resources"
+        name = "CRUD REST API for Comment Resource"
 )
 public class CommentController {
     private CommentService commentService;
