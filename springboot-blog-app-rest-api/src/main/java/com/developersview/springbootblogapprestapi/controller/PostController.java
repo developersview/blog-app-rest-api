@@ -86,7 +86,7 @@ public class PostController {
     //update post
     @Operation(
             summary = "Update Post by ID Rest Endpoint",
-            description = "This endpoint is used to update a post details in the database based on post ID"
+            description = "This endpoint is used to update a post details into database based on post ID"
     )
     @ApiResponse(
             responseCode = "200",
