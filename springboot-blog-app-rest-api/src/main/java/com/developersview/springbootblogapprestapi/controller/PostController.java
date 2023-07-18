@@ -4,7 +4,10 @@ import com.developersview.springbootblogapprestapi.payload.PostDto;
 import com.developersview.springbootblogapprestapi.payload.PostResponse;
 import com.developersview.springbootblogapprestapi.service.PostService;
 import com.developersview.springbootblogapprestapi.utils.AppConstants;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,7 +22,9 @@ import java.util.List;
  */
 @RestController
 @RequestMapping("/api/posts")
-
+@Tag(
+        name = "CRUD REST API for Blog Post Resources "
+)
 public class PostController {
     private PostService postService;
 
@@ -27,6 +32,15 @@ public class PostController {
         this.postService = postService;
     }
 
+    //create a post
+    @Operation(
+            summary = "Create Post Rest Endpoint",
+            description = "This endpoint is used to save post into database"
+    )
+    @ApiResponse(
+            responseCode = "201",
+            description = "HTTP Status - 201 CREATED"
+    )
     @SecurityRequirement(
             name = "Bear Authentication"
     )
@@ -36,6 +50,15 @@ public class PostController {
         return new ResponseEntity<>(postService.createPost(postDto), HttpStatus.CREATED);
     }
 
+    //get all posts
+    @Operation(
+            summary = "Get All Posts Rest Endpoint",
+            description = "This endpoint is used to fetch all the post details from the database"
+    )
+    @ApiResponse(
+            responseCode = "200",
+            description = "HTTP Status - 200 SUCCESS"
+    )
     @GetMapping
     public PostResponse getAllPosts(
             @RequestParam(value = "pageNo", defaultValue = AppConstants.DEFAULT_PAGE_NUMBER, required = false) int pageNo,
@@ -46,11 +69,29 @@ public class PostController {
         return postService.getAllPosts(pageNo, pageSize, sortBy, sortDir);
     }
 
+    //get a post by id
+    @Operation(
+            summary = "Get Post by ID Rest Endpoint",
+            description = "This endpoint is used to get only one post details from the database based on post ID"
+    )
+    @ApiResponse(
+            responseCode = "200",
+            description = "HTTP Status - 200 SUCCESS"
+    )
     @GetMapping("/{id}")
     public ResponseEntity<PostDto> getPostById(@PathVariable long id) {
         return new ResponseEntity<>(postService.getPostById(id), HttpStatus.OK);
     }
 
+    //update post
+    @Operation(
+            summary = "Update Post by ID Rest Endpoint",
+            description = "This endpoint is used to update a post details in the database based on post ID"
+    )
+    @ApiResponse(
+            responseCode = "200",
+            description = "HTTP Status - 200 SUCCESS"
+    )
     @SecurityRequirement(
             name = "Bear Authentication"
     )
@@ -61,6 +102,15 @@ public class PostController {
         return new ResponseEntity<>(getPostResponse, HttpStatus.OK);
     }
 
+    //delete post
+    @Operation(
+            summary = "Delete Post by ID Rest Endpoint",
+            description = "This endpoint is used to delete a post details from the database based on category ID"
+    )
+    @ApiResponse(
+            responseCode = "200",
+            description = "HTTP Status - 200 SUCCESS"
+    )
     @SecurityRequirement(
             name = "Bear Authentication"
     )
@@ -71,6 +121,15 @@ public class PostController {
         return new ResponseEntity<>("Post has been successfully deleted", HttpStatus.OK);
     }
 
+    //get posts by category id
+    @Operation(
+            summary = "Get Post by Category Rest Endpoint",
+            description = "This endpoint is used to get posts details from the database based on post ID"
+    )
+    @ApiResponse(
+            responseCode = "200",
+            description = "HTTP Status - 200 SUCCESS"
+    )
     @GetMapping("/category/{id}")
     public ResponseEntity<List<PostDto>> getPostsByCategory(@PathVariable("id") Long categoryId){
         List<PostDto> posts = postService.getPostsByCategory(categoryId);
