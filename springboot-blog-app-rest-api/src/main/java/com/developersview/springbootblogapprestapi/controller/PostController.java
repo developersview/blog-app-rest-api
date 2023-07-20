@@ -21,7 +21,7 @@ import java.util.List;
  * @Date 20/06/2023
  */
 @RestController
-@RequestMapping("/api/posts")
+@RequestMapping("/api/v1/posts")
 @Tag(
         name = "CRUD REST API for Post Resource"
 )

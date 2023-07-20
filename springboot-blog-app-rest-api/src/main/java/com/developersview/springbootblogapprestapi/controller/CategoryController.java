@@ -19,7 +19,7 @@ import java.util.List;
  * @Date 16/07/2023
  */
 @RestController
-@RequestMapping("api/categories")
+@RequestMapping("api/v1/categories")
 @Tag(
         name = "CRUD REST API for Category Resource"
 )

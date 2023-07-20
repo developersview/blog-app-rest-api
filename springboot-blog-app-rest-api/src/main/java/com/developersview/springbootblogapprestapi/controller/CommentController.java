@@ -17,7 +17,7 @@ import java.util.List;
  * @Date 28/06/2023
  */
 @RestController
-@RequestMapping("/api/")
+@RequestMapping("/api/v1")
 @Tag(
         name = "CRUD REST API for Comment Resource"
 )
